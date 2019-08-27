@@ -3,8 +3,8 @@ const bluetvBrand = '#2E2F41';
 const bluetvButtonBlue = '#56A2FE';
 const freeWatchBarEl = document.createElement('div');
 const freeWatchLinkEl = document.createElement('a');
-document.querySelector('.nav-header').style.opacity = '0';
-document.querySelector('.nav-right').style.opacity = '0';
+document.querySelector('.nav-header').style.display = 'none';
+document.querySelector('.nav-right').style.display = 'none';
 Object.assign(freeWatchBarEl.style, {
    width: '100%',
    padding: '.6em 0',
@@ -84,16 +84,18 @@ const playButtonToDelete = document.querySelector('[test-id=playButton]');
 playButtonToDelete.parentElement.removeChild(playButtonToDelete);
 
 showsCardList.forEach((x, i) => {
-   const hoverDivOverlay = document.createElement('div');
+   const overlayDiv = document.createElement('div');
    const hoverDivVideoIcon = document.createElement('img');
-   const hoverDivInfo = document.createElement('div');
+   const infoDiv = document.createElement('div');
    const infoText = document.createElement('p');
    const signInButton = document.createElement('button');
+
    signInButton.innerText = 'Kayıt Ol';
-   signInButton.style.cursor = 'pointer';
-   infoText.innerText = 'İzlemek için hemen üye ol';
-   infoText.style.fontSize = '1.3em';
-   hoverDivOverlay.className = 'shows-hover-div';
+   signInButton.classList = 'button primary-action';
+   infoText.innerText = 'İzlemek için hemen üye ol.';
+   Object.assign(infoText.style, {
+      fontSize: '1.3em'
+   })
    Object.assign(hoverDivVideoIcon.style, {
       margin: '0 auto',
       width: '50px'
@@ -101,9 +103,9 @@ showsCardList.forEach((x, i) => {
 
    if (i === 0) {
       hoverDivVideoIcon.src = 'https://hype.com.tr/emre/play.png';
-      hoverDivOverlay.appendChild(hoverDivVideoIcon);
+      overlayDiv.appendChild(hoverDivVideoIcon);
 
-      Object.assign(hoverDivOverlay.style, {
+      Object.assign(overlayDiv.style, {
          background: 'none',
          height: '100%',
          width: '100%',
@@ -117,17 +119,16 @@ showsCardList.forEach((x, i) => {
          transition: 'opacity .5s'
       });
 
-      x.appendChild(hoverDivOverlay);
+      x.appendChild(overlayDiv);
 
    } else {
       hoverDivVideoIcon.src = 'https://hype.com.tr/emre/lock.png';
-      hoverDivOverlay.appendChild(hoverDivVideoIcon);
+      overlayDiv.appendChild(hoverDivVideoIcon);
+      infoDiv.appendChild(infoText);
+      infoDiv.appendChild(signInButton);
 
-      hoverDivInfo.appendChild(infoText);
-      hoverDivInfo.appendChild(signInButton);
-
-      Object.assign(hoverDivInfo.style, {
-         background: 'rgba(0, 8, 8, 0.50)',
+      Object.assign(infoDiv.style, {
+         background: 'rgba(0, 8, 8, 0.65)',
          height: '100%',
          width: '100%',
          opacity: '0',
@@ -148,7 +149,7 @@ showsCardList.forEach((x, i) => {
          width: '50px'
       })
 
-      Object.assign(hoverDivOverlay.style, {
+      Object.assign(overlayDiv.style, {
          background: 'rgba(0, 0, 0, 0.65)',
          height: '100%',
          width: '100%',
@@ -160,36 +161,28 @@ showsCardList.forEach((x, i) => {
          position: 'absolute',
          padding: '0',
          transition: 'opacity .5s',
-         zIndex: '33'
       });
 
-      
-      hoverDivOverlay.onmouseover = function() {
-         Object.assign(hoverDivOverlay.style, {
-            opacity: '0',
+      x.onmouseover = () => {
+         Object.assign(overlayDiv.style, {
+           opacity: '0',
          })
-         Object.assign(hoverDivVideoIcon.style, {
-            opacity: '0'
+         Object.assign(infoDiv.style, {
+           opacity: '1',
          })
-         Object.assign(hoverDivInfo.style, {
-            opacity: '1',
+      }
+     
+      x.onmouseout = () => {
+         Object.assign(overlayDiv.style, {
+           opacity: '1',
+         })
+         Object.assign(infoDiv.style, {
+           opacity: '0',
          })
       }
 
-      hoverDivOverlay.onmouseout = function() {
-         Object.assign(hoverDivOverlay.style, {
-            opacity: '1',
-         })
-         Object.assign(hoverDivVideoIcon.style, {
-            opacity: '1'
-         })
-         Object.assign(hoverDivInfo.style, {
-            opacity: '0',
-         })
-      }
-
-      x.appendChild(hoverDivOverlay);
-      x.appendChild(hoverDivInfo);
+      x.appendChild(overlayDiv);
+      x.appendChild(infoDiv);
    }
 })
 
